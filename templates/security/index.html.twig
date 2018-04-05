@@ -4,4 +4,5 @@
 
 {% block body %}
 {{ app.user.username }}
+<a href="{{ path('logout') }}">Logout</a>
 {% endblock %}
