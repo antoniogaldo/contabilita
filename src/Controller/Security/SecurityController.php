@@ -38,7 +38,7 @@ class SecurityController extends Controller
     ));
   }
 
-  /**
+    /**
      * @Route("/register", name="user_registration")
      */
     public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
@@ -54,15 +54,12 @@ class SecurityController extends Controller
             // 3) Encode the password (you could also do this via Doctrine listener)
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
-
             // 4) save the User!
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
-
             return $this->redirectToRoute('login');
         }
 
@@ -71,6 +68,7 @@ class SecurityController extends Controller
             array('form' => $form->createView())
         );
     }
+    
     /**
      * @Route("/dashboard", name="dashboard")
      */
