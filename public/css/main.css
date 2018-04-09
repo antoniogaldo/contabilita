@@ -4,3 +4,7 @@
     margin: 50px  auto;
     border: 1px dashed black;
 }
+thead.thead-dark {
+    color: #fff;
+    background-color: #212529;
+}

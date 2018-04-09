@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+
 <div class="col-md-6">
-  <h1>Registrati</h1>
+    <h1>Registrati</h1>
 {{ form_start(form) }}
 <div class="form-group">
     {{ form_row(form.username, {'attr': {'class': 'form-control'}}) }}
@@ -15,7 +16,31 @@
 <div class="form-group">
     {{ form_row(form.Password.second, {'attr': {'class': 'form-control'}}) }}
 </div>
+<div class="form-group">
+    {{ form_row(form.roles, {'attr': {'class': 'form-control'}}) }}
+</div>
     <button type="submit" class="btn btn-info">Registrati</button>
 {{ form_end(form) }}
+</div>
+<div class="col-md-6">
+    <h1>Lista utenti</h1>
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">nome</th>
+      <th scope="col">email</th>
+      <th scope="col">ruolo</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr>
+      <td>{{u.username}}</td>
+      <td>{{u.email}}</td>
+      <td>{% for roles in u.roles  %}{{roles}}{% endfor %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 </div>
 {% endblock %}

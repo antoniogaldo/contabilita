@@ -1,5 +1,5 @@
 <?php
-namespace App\Form;
+namespace App\Form\Security;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
@@ -22,7 +22,14 @@ class UserType extends AbstractType
                 'type' => PasswordType::class,
                 'first_options'  => array('label' => 'Password'),
                 'second_options' => array('label' => 'Repeat Password'),
-            ));
+            ))
+            ->add('roles', ChoiceType::class, [
+                'multiple' => true,
+                'choices' => [
+                    'Admin' => 'ROLE_ADMIN',
+                    'User' => 'ROLE_USER',
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
