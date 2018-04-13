@@ -120,9 +120,9 @@
                 <li class="header"></li>
                 <!-- Optionally, you can add icons to the links -->
                 {% if is_granted('ROLE_ADMIN') %}
-                <li class="active"><a href="{{ path('user_registration') }}"><i class="fa fa-users"></i> <span>User</span></a></li>
+                <li class="{{ app.request.get('_route') == 'user_registration' ? 'active' }}"><a href="{{ path('user_registration') }}"><i class="fa fa-users"></i> <span>User</span></a></li>
                 {% endif %}
-                <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
+                <li class="{{ app.request.get('_route') == 'anagrafica' ? 'active' }}"><a href="{{ path('anagrafica') }}"><i class="fa fa-pencil"></i> <span>Anagrafica</span></a></li>
                 <li class="treeview">
                   <a href="#"><i class="fa fa-link"></i> <span>Link</span>
                     <span class="pull-right-container">
