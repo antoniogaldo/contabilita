@@ -2,14 +2,15 @@
 namespace App\Form\Anagrafica;
 
 use App\Entity\Anagrafica\Clienti;
+use App\Entity\Anagrafica\Associati;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\EntityType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class ClientiType extends AbstractType
+class AssociatiType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -20,13 +21,17 @@ class ClientiType extends AbstractType
               'widget' => 'single_text',
               'format' => 'yyyy-MM-dd',))
             ->add('luogo', TextType::class)
+            ->add('associati', EntityType::class, array(
+              'class' => Clienti::class,
+              'choice_label' => 'cognome',
+          ))
             ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Clienti::class,
+            'data_class' => Associati::class,
         ));
     }
 }

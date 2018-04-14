@@ -5,10 +5,10 @@ namespace App\Entity\Anagrafica;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="anagrafica__clienti")
- * @ORM\Entity(repositoryClass="App\Repository\Anagrafica\ClientiRepository")
+ * @ORM\Table(name="anagrafica__associati")
+ * @ORM\Entity(repositoryClass="App\Repository\Anagrafica\AssociatiRepository")
  */
-class Clienti
+class Associati
 {
     /**
      * @ORM\Column(type="integer")
@@ -28,7 +28,7 @@ class Clienti
     private $cognome;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime")
      */
     private $data;
 
@@ -38,9 +38,11 @@ class Clienti
     private $luogo;
 
     /**
-    * @ORM\OneToMany(targetEntity="Associati", mappedBy="associati", cascade={"persist"})
+    * @ORM\ManyToOne(targetEntity="Clienti", inversedBy="associati")
+    * @ORM\JoinColumn(name="clienti_id", referencedColumnName="id", onDelete="SET NULL")
     */
     private $associati;
+
 
     /**
      * Set nome
@@ -142,11 +144,11 @@ class Clienti
     /**
     * Set Associati
     *
-    * @param mixed associati
+    * @param Clienti $associati
     *
-    * @return Clienti
+    * @return Associati
     */
-    public function setAssociati($associati)
+    public function setAssociati(Clienti $associati = null)
     {
      $this->associati = $associati;
 
