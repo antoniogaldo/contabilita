@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EntityType;
 
 class ClientiType extends AbstractType
@@ -20,7 +21,11 @@ class ClientiType extends AbstractType
               'widget' => 'single_text',
               'format' => 'yyyy-MM-dd',))
             ->add('luogo', TextType::class)
-            ;
+            ->add('sesso', ChoiceType::class, array(
+                'choices'  => array(
+                    'Maschio' => 'm',
+                    'Femmina' => 'f',
+                )));
     }
 
     public function configureOptions(OptionsResolver $resolver)

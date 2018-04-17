@@ -16,7 +16,33 @@
 <div class="form-group">
     {{ form_row(form.luogo, {'attr': {'class': 'form-control'}}) }}
 </div>
+<div class="form-group">
+    {{ form_row(form.sesso, {'attr': {'class': 'form-control'}}) }}
+</div>
     <button type="submit" class="btn btn-info">Registrati</button>
 {{ form_end(form) }}
+</div>
+<div class="col-md-6">
+  <h1>Lista clienti</h1>
+<table class="table">
+<thead class="thead-dark">
+  <tr>
+    <th scope="col">nome</th>
+    <th scope="col">cognome</th>
+    <th scope="col">data</th>
+    <th scope="col">luogo</th>
+  </tr>
+</thead>
+<tbody>
+  {% for c in cliente %}
+  <tr>
+    <td>{{c.nome}}</td>
+    <td>{{c.cognome}}</td>
+    <td>{{c.data|date('Y-m-d')}}</td>
+    <td>{{c.luogo}}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
 </div>
 {% endblock %}

@@ -38,6 +38,11 @@ class Clienti
     private $luogo;
 
     /**
+     * @ORM\Column(type="string", length=2)
+     */
+    private $sesso;
+
+    /**
     * @ORM\OneToMany(targetEntity="Associati", mappedBy="associati", cascade={"persist"})
     */
     private $associati;
@@ -137,6 +142,30 @@ class Clienti
     public function getLuogo()
     {
     return $this->luogo;
+    }
+
+    /**
+     * Get sesso
+     *
+     * @return string
+     */
+    public function getSesso()
+    {
+        return $this->sesso;
+    }
+
+    /**
+     * Set sesso
+     *
+     * @param string sesso
+     *
+     * @return Clienti
+     */
+    public function setSesso($sesso)
+    {
+        $this->sesso = $sesso;
+
+        return $this;
     }
 
     /**
