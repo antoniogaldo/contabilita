@@ -10,6 +10,7 @@ use App\Form\Anagrafica\ClientiType;
 use App\Form\Anagrafica\AssociatiType;
 use App\Entity\Anagrafica\Clienti;
 use App\Entity\Anagrafica\Associati;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use GuzzleHttp\Client;
 
 class AnagraficaController extends Controller
@@ -25,14 +26,24 @@ class AnagraficaController extends Controller
         $clienti = new Clienti();
         $form = $this->createForm(ClientiType::class, $clienti);
         // 2) handle the submit (will only happen on POST)
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // 4) save the User!
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($clienti);
-            $entityManager->flush();
-        }
-
+        if ($request->isMethod('POST')) {
+          $form->handleRequest($request);
+          if ($form->isSubmitted() && $form->isValid()) {
+              // 4) save the User!
+              $entityManager = $this->getDoctrine()->getManager();
+              $entityManager->persist($clienti);
+              $entityManager->flush();
+              $request->getSession()
+                  ->getFlashBag()
+                  ->add('success', 'Cliente inserito con successo');
+              }
+              else {
+                // alert insucces //
+                $request->getSession()
+                ->getFlashBag()
+                ->add('notsuccess', 'Richiesta non riuscita');
+              }
+            }
         return $this->render(
             'anagrafica/aggiungi.html.twig',array(
               'form' => $form->createView(),
