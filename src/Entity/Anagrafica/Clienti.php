@@ -3,10 +3,12 @@
 namespace App\Entity\Anagrafica;
 
 use Doctrine\ORM\Mapping as ORM;
+use GuzzleHttp\Client;
 
 /**
  * @ORM\Table(name="anagrafica__clienti")
  * @ORM\Entity(repositoryClass="App\Repository\Anagrafica\ClientiRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Clienti
 {
@@ -41,6 +43,11 @@ class Clienti
      * @ORM\Column(type="string", length=2)
      */
     private $sesso;
+
+    /**
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $codicefiscale;
 
     /**
     * @ORM\OneToMany(targetEntity="Associati", mappedBy="associati", cascade={"persist"})
@@ -145,16 +152,6 @@ class Clienti
     }
 
     /**
-     * Get sesso
-     *
-     * @return string
-     */
-    public function getSesso()
-    {
-        return $this->sesso;
-    }
-
-    /**
      * Set sesso
      *
      * @param string sesso
@@ -167,6 +164,61 @@ class Clienti
 
         return $this;
     }
+
+    /**
+     * Get sesso
+     *
+     * @return string
+     */
+    public function getSesso()
+    {
+        return $this->sesso;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCodicefiscale($codicefiscale)
+    {
+      $nome = $this->getNome();
+      $cognome = $this->getCognome();
+      $luogo = $this->getLuogo();
+      $data = $this->getData();
+      $sesso = $this->getSesso();
+      $data = $data->format('d/m/Y');
+      $client = new Client([
+          // Base URI is used with relative requests
+          'base_uri' => 'http://webservices.dotnethell.it/codicefiscale.asmx/CalcolaCodiceFiscale',
+          // You can set any number of default request options.
+          'timeout'  => 2.0,
+      ]);
+      $res = $client->request('POST', 'http://webservices.dotnethell.it/codicefiscale.asmx/CalcolaCodiceFiscale', array(
+        'form_params' => array(
+          'Nome' => $nome,
+          'Cognome' => $cognome,
+          'ComuneNascita' => $luogo,
+          'DataNascita' => $data,
+          'Sesso' => $sesso,
+      ),
+        'headers' => [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            ]));
+      $codicefiscale = $res->getBody()->getContents();
+      $codicefiscale = simplexml_load_string($codicefiscale);
+      $this->codicefiscale = $codicefiscale;
+      return $this;
+    }
+
+    /**
+     * Get codicefiscale
+     *
+     * @return string
+     */
+    public function getCodicefiscale()
+    {
+        return $this->codicefiscale;
+    }
+
 
     /**
     * Set Associati
