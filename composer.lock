@@ -4461,16 +4461,16 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v4.0.6",
+            "version": "v4.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "56f72db4783d715a6742a783813362b514a77c1d"
+                "reference": "b9546d78133d6af199ac6625d0d587a2d804f967"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/56f72db4783d715a6742a783813362b514a77c1d",
-                "reference": "56f72db4783d715a6742a783813362b514a77c1d",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/b9546d78133d6af199ac6625d0d587a2d804f967",
+                "reference": "b9546d78133d6af199ac6625d0d587a2d804f967",
                 "shasum": ""
             },
             "require": {
@@ -4541,7 +4541,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "https://symfony.com",
-            "time": "2018-03-01T10:21:51+00:00"
+            "time": "2018-04-06T07:35:43+00:00"
         },
         {
             "name": "symfony/web-link",

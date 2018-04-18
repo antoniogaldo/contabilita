@@ -1,6 +1,5 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-<!-- START ACCORDION & CAROUSEL-->
       <h2 class="page-header">Anagrafica</h2>
       <div class="row">
         <div class="col-md-6">
@@ -72,11 +71,12 @@
 <table id="example1" class="table table-bordered table-striped">
 <thead>
   <tr>
-    <th>nome</th>
-    <th>cognome</th>
-    <th>data</th>
-    <th>luogo</th>
-    <th>codice fiscale</th>
+    <th>Nome</th>
+    <th>Cognome</th>
+    <th>Data</th>
+    <th>Luogo</th>
+    <th>Codice fiscale</th>
+    <th>Azioni</th>
   </tr>
 </thead>
 <tbody>
@@ -84,9 +84,13 @@
   <tr>
     <td>{{c.nome}}</td>
     <td>{{c.cognome}}</td>
-    <td>{{c.data|date('Y-m-d')}}</td>
+    <td>{{c.data|date('d-m-Y')}}</td>
     <td>{{c.luogo}}</td>
     <td>{{c.codicefiscale}}</td>
+    <td>
+      <a class="btn btn-primary btn-xs" href="{{ path('edit', { id: c.id }) }}"><i class="fa fa-edit"></i> Modifica</a>
+      <a class="btn btn-danger btn-xs" href="{{ path('delete', { id: c.id }) }}"><i class="fa fa-edit"></i> Cancella</a>
+    </td>
   </tr>
   {% endfor %}
 </tbody>

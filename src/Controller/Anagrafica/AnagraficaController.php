@@ -43,6 +43,7 @@ class AnagraficaController extends Controller
                 ->getFlashBag()
                 ->add('notsuccess', 'Richiesta non riuscita');
               }
+              return $this->redirectToRoute('anagrafica');
             }
         return $this->render(
             'anagrafica/aggiungi.html.twig',array(
@@ -50,6 +51,82 @@ class AnagraficaController extends Controller
               'cliente' => $cliente
             ));
     }
+
+    /**
+     * @Route("/anagrafica/edit/{id}", name="edit")
+     */
+     public function updateAction(Request $request,$id)
+     {
+         $entityManager = $this->getDoctrine()->getManager();
+         $cliente = $entityManager->getRepository(Clienti::class)->find($id);
+         $cliente->setNome($cliente->getNome());
+         $cliente->setCognome($cliente->getCognome());
+         $cliente->setData($cliente->getData());
+         $cliente->setLuogo($cliente->getLuogo());
+         if (!$cliente) {
+             throw $this->createNotFoundException(
+                 'No cinema found for id '.$id
+             );
+         }
+         $form = $this->createForm(ClientiType::class, $cliente);
+         if ($request->isMethod('POST')) {
+                     // handle the first form
+                     $form->handleRequest($request);
+                     // control form //
+                       if($form->isSubmitted() &&  $form->isValid()){
+                         $nome = $form['nome']->getData();
+                         $cognome = $form['cognome']->getData();
+                         $data = $form['data']->getData();
+                         $luogo = $form['luogo']->getData();
+                         $sn = $this->getDoctrine()->getManager();
+                         $cliente = $sn->getRepository(Clienti::class)->find($id);
+
+                         $cliente->setNome($nome);
+                         $cliente->setCognome($cognome);
+                         $cliente->setData($data);
+                         $cliente->setLuogo($luogo);
+
+                         $sn -> persist($cliente);
+                         $sn -> flush();
+                         // alert success //
+                         $request->getSession()
+                         ->getFlashBag()
+                         ->add('success', 'Hai modificato un cliente');
+              }
+              else {
+                // alert insucces //
+                $request->getSession()
+                ->getFlashBag()
+                ->add('notsuccess', 'Email gia presente');
+              }
+              return $this->redirectToRoute('anagrafica');
+    }
+         return $this->render('anagrafica/modaledit.html.twig', [
+             'form' => $form->createView(),
+             'cliente' => $cliente
+
+         ]);
+     }
+
+
+    /**
+    * @Route("/anagrafica/delete/{id}", name="delete")
+    */
+   public function deleteAction($id)
+   {
+       $entityManager = $this->getDoctrine()->getManager();
+       $clienti = $entityManager->getRepository(Clienti::class)->find($id);
+
+       if (!$clienti) {
+           throw $this->createNotFoundException(
+               'Cliente non trovato '.$id
+           );
+       }
+       $entityManager->remove($clienti);
+       $entityManager->flush();
+       return $this->redirectToRoute('anagrafica');
+       return $this->render('anagrafica/aggiungi.html.twig');
+   }
 
     /**
      * @Route("/associati", name="associati")

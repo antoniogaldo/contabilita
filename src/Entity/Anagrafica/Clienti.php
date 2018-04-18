@@ -2,11 +2,14 @@
 
 namespace App\Entity\Anagrafica;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use GuzzleHttp\Client;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table(name="anagrafica__clienti")
+ * @UniqueEntity("codicefiscale")
  * @ORM\Entity(repositoryClass="App\Repository\Anagrafica\ClientiRepository")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -45,7 +48,7 @@ class Clienti
     private $sesso;
 
     /**
-     * @ORM\Column(type="string", length=64, nullable=true)
+     * @ORM\Column(type="string", length=64, nullable=true, unique=true)
      */
     private $codicefiscale;
 
@@ -53,6 +56,11 @@ class Clienti
     * @ORM\OneToMany(targetEntity="Associati", mappedBy="associati", cascade={"persist"})
     */
     private $associati;
+
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set nome
