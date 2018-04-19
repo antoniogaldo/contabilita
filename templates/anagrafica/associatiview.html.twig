@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="col-md-12">
+    <h1>Associati</h1>
+    <h2>Nucleo familiare</h2>
+    <table id="example2" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Cognome</th>
+          <th>Data</th>
+          <th>Luogo</th>
+          <th>Codice fiscale</th>
+          <th>Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>{{clienti.nome}}</strong></td>
+          <td><strong>{{clienti.cognome}}</strong></td>
+          <td>{{clienti.data|date('d-m-Y')}}</td>
+          <td>{{clienti.luogo}}</td>
+          <td>{{clienti.codicefiscale}}</td>
+        </tr>
+      {% for c in clienti.associati %}
+        <tr>
+          <td>{{c.nome}}</td>
+          <td>{{c.cognome}}</td>
+          <td>{{c.data|date('d-m-Y')}}</td>
+          <td>{{c.luogo}}</td>
+          <td>{{c.codicefiscale}}</td>
+          <td><a class="btn btn-danger btn-xs" href="{{ path('associatidelete', { id: c.id }) }}"><i class="fa fa-trash"></i> Cancella</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+</div>
+{% endblock %}

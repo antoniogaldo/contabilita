@@ -1,12 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-
 <div class="col-md-6">
     <h1>Associati</h1>
+    <h3>Capo Famiglia<h4>{{clienti.nome}}{{clienti.cognome}}</h4></h3>
 {{ form_start(form) }}
-<div class="form-group">
-    {{ form_row(form.associati, {'attr': {'class': 'form-control'}}) }}
-</div>
 <div class="form-group">
     {{ form_row(form.nome, {'attr': {'class': 'form-control'}}) }}
 </div>
@@ -18,6 +15,9 @@
 </div>
 <div class="form-group">
     {{ form_row(form.luogo, {'attr': {'class': 'form-control'}}) }}
+</div>
+<div class="form-group">
+  {{ form_row(form.sesso, {'attr': {'class': 'form-control'}}) }}
 </div>
     <button type="submit" class="btn btn-info">Registrati</button>
 {{ form_end(form) }}

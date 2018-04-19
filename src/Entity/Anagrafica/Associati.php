@@ -3,10 +3,12 @@
 namespace App\Entity\Anagrafica;
 
 use Doctrine\ORM\Mapping as ORM;
+use GuzzleHttp\Client;
 
 /**
  * @ORM\Table(name="anagrafica__associati")
  * @ORM\Entity(repositoryClass="App\Repository\Anagrafica\AssociatiRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Associati
 {
@@ -38,10 +40,25 @@ class Associati
     private $luogo;
 
     /**
+     * @ORM\Column(type="string", length=2)
+     */
+    private $sesso;
+
+    /**
+     * @ORM\Column(type="string", length=64, nullable=true, unique=true)
+     */
+    private $codicefiscale;
+
+    /**
     * @ORM\ManyToOne(targetEntity="Clienti", inversedBy="associati")
     * @ORM\JoinColumn(name="clienti_id", referencedColumnName="id", onDelete="SET NULL")
     */
     private $associati;
+
+    public function getId()
+    {
+        return $this->id;
+    }
 
 
     /**
@@ -139,6 +156,74 @@ class Associati
     public function getLuogo()
     {
     return $this->luogo;
+    }
+
+    /**
+     * Set sesso
+     *
+     * @param string sesso
+     *
+     * @return Clienti
+     */
+    public function setSesso($sesso)
+    {
+        $this->sesso = $sesso;
+
+        return $this;
+    }
+
+    /**
+     * Get sesso
+     *
+     * @return string
+     */
+    public function getSesso()
+    {
+        return $this->sesso;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCodicefiscale($codicefiscale)
+    {
+      $nome = $this->getNome();
+      $cognome = $this->getCognome();
+      $luogo = $this->getLuogo();
+      $data = $this->getData();
+      $sesso = $this->getSesso();
+      $data = $data->format('d/m/Y');
+      $client = new Client([
+          // Base URI is used with relative requests
+          'base_uri' => 'http://webservices.dotnethell.it/codicefiscale.asmx/CalcolaCodiceFiscale',
+          // You can set any number of default request options.
+          'timeout'  => 2.0,
+      ]);
+      $res = $client->request('POST', 'http://webservices.dotnethell.it/codicefiscale.asmx/CalcolaCodiceFiscale', array(
+        'form_params' => array(
+          'Nome' => $nome,
+          'Cognome' => $cognome,
+          'ComuneNascita' => $luogo,
+          'DataNascita' => $data,
+          'Sesso' => $sesso,
+      ),
+        'headers' => [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            ]));
+      $codicefiscale = $res->getBody()->getContents();
+      $codicefiscale = simplexml_load_string($codicefiscale);
+      $this->codicefiscale = $codicefiscale;
+      return $this;
+    }
+
+    /**
+     * Get codicefiscale
+     *
+     * @return string
+     */
+    public function getCodicefiscale()
+    {
+        return $this->codicefiscale;
     }
 
     /**

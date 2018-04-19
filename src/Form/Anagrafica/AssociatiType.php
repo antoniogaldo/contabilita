@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class AssociatiType extends AbstractType
 {
@@ -21,11 +22,11 @@ class AssociatiType extends AbstractType
               'widget' => 'single_text',
               'format' => 'yyyy-MM-dd',))
             ->add('luogo', TextType::class)
-            ->add('associati', EntityType::class, array(
-              'class' => Clienti::class,
-              'choice_label' => 'cognome',
-          ))
-            ;
+            ->add('sesso', ChoiceType::class, array(
+                'choices'  => array(
+                    'Maschio' => 'm',
+                    'Femmina' => 'f',
+                )));
     }
 
     public function configureOptions(OptionsResolver $resolver)

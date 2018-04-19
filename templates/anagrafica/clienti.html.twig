@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h2 class="page-header">Anagrafica</h2>
+<div class="row">
+  <div class="col-md-6">
+    <!-- alert success -->
+    {% if app.session.flashBag.has('success') %}
+    <div class="alert alert-success alert-dismissible">
+      <a class="close" data-dismiss="alert" aria-label="close">×</a>
+      {% for msg in app.session.flashBag.get('success') %}
+      {{ msg }}
+      {% endfor %}
+    </div>
+    {% elseif app.session.flashBag.has('notsuccess') %}
+    <div class="alert alert-danger alert-dismissable">
+      <a class="close" data-dismiss="alert" aria-label="close">×</a>
+      {% for msg in app.session.flashBag.get('notsuccess') %}
+      {{ msg }}
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div class="box box-solid">
+      <div class="box-header with-border">
+        <h3 class="box-title">Gestione cliente</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-group" id="accordion">
+        <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+        <div class="panel box box-primary">
+          <div class="box-header with-border">
+            <h4 class="box-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                Aggiungi cliente
+              </a>
+            </h4>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse">
+            <div class="box-body">
+              {{ form_start(form) }}
+              <div class="form-group">
+                {{ form_row(form.nome, {'attr': {'class': 'form-control'}}) }}
+              </div>
+              <div class="form-group">
+                {{ form_row(form.cognome, {'attr': {'class': 'form-control'}}) }}
+              </div>
+              <div class="form-group">
+                {{ form_row(form.data, {'attr': {'class': 'form-control'}}) }}
+              </div>
+              <div class="form-group">
+                {{ form_row(form.luogo, {'attr': {'class': 'form-control'}}) }}
+              </div>
+              <div class="form-group">
+                {{ form_row(form.sesso, {'attr': {'class': 'form-control'}}) }}
+              </div>
+              <button type="submit" class="btn btn-info">Registrati</button>
+              {{ form_end(form) }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+<!-- END ACCORDION & CAROUSEL-->
+<h2>Lista clienti</h2>
+<table id="example1" class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Cognome</th>
+      <th>Data</th>
+      <th>Luogo</th>
+      <th>Codice fiscale</th>
+      <th>Azioni</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in cliente %}
+    <tr>
+      <td>{{c.nome}}</td>
+      <td>{{c.cognome}}</td>
+      <td>{{c.data|date('d-m-Y')}}</td>
+      <td>{{c.luogo}}</td>
+      <td>{{c.codicefiscale}}</td>
+      <td>
+        <a class="btn btn-info btn-xs" href="{{ path('associatiview', { id: c.id }) }}"><i class="fa fa-search"></i> Vedi associati</a>
+        <a class="btn btn-primary btn-xs" href="{{ path('edit', { id: c.id }) }}"><i class="fa fa-edit"></i> Modifica</a>
+        <a class="btn btn-danger btn-xs" href="{{ path('delete', { id: c.id }) }}"><i class="fa fa-trash"></i> Cancella</a>
+        <a class="btn btn-success btn-xs" href="{{ path('associati', { id: c.id }) }}"><i class="fa fa-plus"></i> Aggiungi cliente associato</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

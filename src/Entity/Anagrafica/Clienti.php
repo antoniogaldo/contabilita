@@ -48,7 +48,7 @@ class Clienti
     private $sesso;
 
     /**
-     * @ORM\Column(type="string", length=64, nullable=true, unique=true)
+     * @ORM\Column(type="string", length=64, nullable=false, unique=true)
      */
     private $codicefiscale;
 
