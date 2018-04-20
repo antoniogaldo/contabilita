@@ -53,7 +53,7 @@ class Clienti
     private $codicefiscale;
 
     /**
-    * @ORM\OneToMany(targetEntity="Associati", mappedBy="associati", cascade={"persist"})
+    * @ORM\OneToMany(targetEntity="Associati", mappedBy="associati", cascade={"persist", "remove"})
     */
     private $associati;
 

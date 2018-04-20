@@ -145,13 +145,13 @@ class AnagraficaController extends Controller
           $entityManager->flush();
           $request->getSession()
           ->getFlashBag()
-          ->add('success', 'Hai modificato un cliente');
+          ->add('success', 'Hai creato un associato');
         }
         else {
           // alert insucces //
           $request->getSession()
           ->getFlashBag()
-          ->add('notsuccess', 'Email gia presente');
+          ->add('notsuccess', 'Errore associato');
         }
         return $this->redirectToRoute('anagrafica');
       }
@@ -181,17 +181,72 @@ class AnagraficaController extends Controller
       public function associatideleteAction($id)
       {
         $entityManager = $this->getDoctrine()->getManager();
-        $clienti = $entityManager->getRepository(Associati::class)->find($id);
+        $associati = $entityManager->getRepository(Associati::class)->find($id);
 
-        if (!$clienti) {
+        if (!$associati) {
           throw $this->createNotFoundException(
             'Cliente non trovato '.$id
           );
         }
-        $entityManager->remove($clienti);
+        $entityManager->remove($associati);
         $entityManager->flush();
-        return $this->redirectToRoute('anagrafica');
+        $id=$associati->getAssociati()->getId();
+        return $this->redirectToRoute('associatiview', array( 'id' => $id ));
         return $this->render('anagrafica/clienti.html.twig');
+      }
+      /**
+      * @Route("/anagrafica/associatiedit/{id}", name="associatiedit")
+      */
+      public function associatoupdateAction(Request $request,$id)
+      {
+        $entityManager = $this->getDoctrine()->getManager();
+        $associati = $entityManager->getRepository(Associati::class)->find($id);
+        $form = $this->createForm(AssociatiType::class, $associati);
+        $associati->setNome($associati->getNome());
+        $associati->setCognome($associati->getCognome());
+        $associati->setData($associati->getData());
+        $associati->setLuogo($associati->getLuogo());
+        if (!$associati) {
+          throw $this->createNotFoundException(
+            'Cliente non trovato'.$id
+          );
+        }
+        $form = $this->createForm(AssociatiType::class, $associati);
+        if ($request->isMethod('POST')) {
+          // handle the first form
+          $form->handleRequest($request);
+          // control form //
+          if($form->isSubmitted() &&  $form->isValid()){
+            $nome = $form['nome']->getData();
+            $cognome = $form['cognome']->getData();
+            $data = $form['data']->getData();
+            $luogo = $form['luogo']->getData();
+            $sn = $this->getDoctrine()->getManager();
+            $associati = $sn->getRepository(Associati::class)->find($id);
+            $associati->setNome($nome);
+            $associati->setCognome($cognome);
+            $associati->setData($data);
+            $associati->setLuogo($luogo);
+            $sn -> persist($associati);
+            $sn -> flush();
+            $request->getSession()
+            ->getFlashBag()
+            ->add('success', 'Hai modificato un associato');
+          }
+          else {
+            // alert insucces //
+            $request->getSession()
+            ->getFlashBag()
+            ->add('notsuccess', 'Email gia presente');
+          }
+          $id=$associati->getAssociati()->getId();
+          return $this->redirectToRoute('associatiview', array( 'id' => $id ));
+        }
+        return $this->render('anagrafica/associatiedit.html.twig', [
+          'form' => $form->createView(),
+          'associati' => $associati,
+
+        ]);
       }
 
 }

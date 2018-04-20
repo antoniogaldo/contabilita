@@ -2,6 +2,22 @@
 {% block body %}
 <div class="col-md-12">
     <h1>Associati</h1>
+    <!-- alert success -->
+    {% if app.session.flashBag.has('success') %}
+    <div class="alert alert-success alert-dismissible">
+      <a class="close" data-dismiss="alert" aria-label="close">×</a>
+      {% for msg in app.session.flashBag.get('success') %}
+      {{ msg }}
+      {% endfor %}
+    </div>
+    {% elseif app.session.flashBag.has('notsuccess') %}
+    <div class="alert alert-danger alert-dismissable">
+      <a class="close" data-dismiss="alert" aria-label="close">×</a>
+      {% for msg in app.session.flashBag.get('notsuccess') %}
+      {{ msg }}
+      {% endfor %}
+    </div>
+    {% endif %}
     <h2>Nucleo familiare</h2>
     <table id="example2" class="table table-bordered table-striped">
       <thead>
@@ -29,7 +45,10 @@
           <td>{{c.data|date('d-m-Y')}}</td>
           <td>{{c.luogo}}</td>
           <td>{{c.codicefiscale}}</td>
-          <td><a class="btn btn-danger btn-xs" href="{{ path('associatidelete', { id: c.id }) }}"><i class="fa fa-trash"></i> Cancella</a></td>
+          <td>
+            <a class="btn btn-danger btn-xs" href="{{ path('associatidelete', { id: c.id }) }}"><i class="fa fa-trash"></i> Cancella</a>
+            <a class="btn btn-primary btn-xs" href="{{ path('associatiedit', { id: c.id }) }}"><i class="fa fa-edit"></i> Modifica</a>
+          </td>
         </tr>
       {% endfor %}
       </tbody>
