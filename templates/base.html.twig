@@ -119,18 +119,32 @@
               <!-- Sidebar Menu -->
               <ul class="sidebar-menu" data-widget="tree">
                 <li class="header"></li>
-                <!-- Optionally, you can add icons to the links -->
+                <!-- User -->
                 {% if is_granted('ROLE_ADMIN') %}
                 <li class="{{ app.request.get('_route') == 'user_registration' ? 'active' }}"><a href="{{ path('user_registration') }}"><i class="fa fa-users"></i> <span>User</span></a></li>
                 {% endif %}
+                <!-- Anagrafica -->
                 <li class="treeview" >
-                  <a href="#"><i class="fa fa-pencil"></i> <span>Anagrafica</span>
+                  <a href="#"><i class="fa fa-address-book"></i> <span>Anagrafica</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                       </span>
                   </a>
                   <ul class="treeview-menu">
                     <li><a href="{{ path('anagrafica') }}">Crea cliente</a></li>
+
+                  </ul>
+                </li>
+                <!-- Pacchetto -->
+                <li class="treeview" >
+                  <a href="#"><i class="fa fa-pencil"></i> <span>Pacchetto</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                      </span>
+                  </a>
+                  <ul class="treeview-menu">
+                    <li><a href="{{ path('pacchetto') }}">Crea pacchetto</a></li>
+
                   </ul>
                 </li>
               </ul>

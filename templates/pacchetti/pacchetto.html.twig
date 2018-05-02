@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<h2 class="page-header">Pacchetti</h2>
+<div class="row">
+  <div class="col-md-6">
+    <!-- alert success -->
+    {% if app.session.flashBag.has('success') %}
+    <div class="alert alert-success alert-dismissible">
+      <a class="close" data-dismiss="alert" aria-label="close">×</a>
+      {% for msg in app.session.flashBag.get('success') %}
+      {{ msg }}
+      {% endfor %}
+    </div>
+    {% elseif app.session.flashBag.has('notsuccess') %}
+    <div class="alert alert-danger alert-dismissable">
+      <a class="close" data-dismiss="alert" aria-label="close">×</a>
+      {% for msg in app.session.flashBag.get('notsuccess') %}
+      {{ msg }}
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div class="box box-solid">
+      <div class="box-header with-border">
+        <h3 class="box-title">Gestione pacchetto</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-group" id="accordion">
+        <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+        <div class="panel box box-primary">
+          <div class="box-header with-border">
+            <h4 class="box-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                Aggiungi pacchetto
+              </a>
+            </h4>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse">
+            <div class="box-body">
+              {{ form_start(form) }}
+              <div class="form-group">
+                {{ form_row(form.nome, {'attr': {'class': 'form-control'}}) }}
+              </div>
+              <div class="form-group">
+                {{ form_row(form.datainizio, {'attr': {'class': 'form-control'}}) }}
+              </div>
+              <div class="form-group">
+                {{ form_row(form.datafine, {'attr': {'class': 'form-control'}}) }}
+              </div>
+              <div class="form-group">
+                {{ form_row(form.luogo, {'attr': {'class': 'form-control'}}) }}
+              </div>
+              <button type="submit" class="btn btn-info">Salva</button>
+              {{ form_end(form) }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+<!-- END ACCORDION & CAROUSEL-->
+<h2>Lista pacchetti</h2>
+<table id="example1" class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Data inizio</th>
+      <th>Data fine</th>
+      <th>Luogo</th>
+      <th>Azioni</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in pacchetti %}
+    <tr>
+      <td>{{p.nome}}</td>
+      <td>{{p.datainizio|date('d-m-Y')}}</td>
+      <td>{{p.datafine|date('d-m-Y')}}</td>
+      <td>{{p.luogo}}</td>
+      <td>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
