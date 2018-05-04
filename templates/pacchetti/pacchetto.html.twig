@@ -82,6 +82,8 @@
       <td>{{p.datafine|date('d-m-Y')}}</td>
       <td>{{p.luogo}}</td>
       <td>
+        <a class="btn btn-primary btn-xs" href="{{ path('pacchettoedit', { id: p.id }) }}"><i class="fa fa-edit"></i> Modifica</a>
+        <a class="btn btn-danger btn-xs" href="{{ path('pacchettodelete', { id: p.id }) }}"><i class="fa fa-trash"></i> Cancella</a>
       </td>
     </tr>
     {% endfor %}

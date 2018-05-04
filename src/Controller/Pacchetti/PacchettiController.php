@@ -51,4 +51,77 @@ class PacchettiController extends Controller
         'servizi' => $servizi
       ));
     }
+
+    /**
+    * @Route("/pacchetto/edit/{id}", name="pacchettoedit")
+    */
+    public function pacchettoupdateAction(Request $request,$id)
+    {
+      $entityManager = $this->getDoctrine()->getManager();
+      $pacchetto = $entityManager->getRepository(Pacchetto::class)->find($id);
+      $pacchetto->setNome($pacchetto->getNome());
+      $pacchetto->setDatainizio($pacchetto->getDatainizio());
+      $pacchetto->setDatafine($pacchetto->getDatafine());
+      $pacchetto->setLuogo($pacchetto->getLuogo());
+      if (!$pacchetto) {
+        throw $this->createNotFoundException(
+          'Pacchetto non trovato'.$id
+        );
+      }
+      $form = $this->createForm(PacchettoType::class, $pacchetto);
+      if ($request->isMethod('POST')) {
+        // handle the first form
+        $form->handleRequest($request);
+        // control form //
+        if($form->isSubmitted() &&  $form->isValid()){
+          $nome = $form['nome']->getData();
+          $datainizio = $form['datainizio']->getData();
+          $datafine = $form['datafine']->getData();
+          $luogo = $form['luogo']->getData();
+          $sn = $this->getDoctrine()->getManager();
+          $pacchetto = $sn->getRepository(Pacchetto::class)->find($id);
+          $pacchetto->setNome($nome);
+          $pacchetto->setDatainizio($datainizio);
+          $pacchetto->setDatafine($datafine);
+          $pacchetto->setLuogo($luogo);
+          $sn -> persist($pacchetto);
+          $sn -> flush();
+          $request->getSession()
+          ->getFlashBag()
+          ->add('success', 'Hai modificato un pacchetto');
+        }
+        else {
+          // alert insucces //
+          $request->getSession()
+          ->getFlashBag()
+          ->add('notsuccess', 'Email gia presente');
+        }
+        return $this->redirectToRoute('pacchetto');
+      }
+      return $this->render('pacchetti/pacchettoedit.html.twig', [
+        'form' => $form->createView(),
+        'pacchetto' => $pacchetto
+
+      ]);
+    }
+
+
+    /**
+    * @Route("/pacchetto/delete/{id}", name="pacchettodelete")
+    */
+    public function pacchettodeleteAction($id)
+    {
+      $entityManager = $this->getDoctrine()->getManager();
+      $pacchetto = $entityManager->getRepository(Pacchetto::class)->find($id);
+
+      if (!$pacchetto) {
+        throw $this->createNotFoundException(
+          'Pacchetto non trovato '.$id
+        );
+      }
+      $entityManager->remove($pacchetto);
+      $entityManager->flush();
+      return $this->redirectToRoute('pacchetto');
+      return $this->render('pacchetti/pacchetto.html.twig');
+    }
 }
