@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Pacchetti\Pacchetto;
 use App\Entity\Pacchetti\Servizi;
 use App\Form\Pacchetti\PacchettoType;
+use App\Form\Pacchetti\ServiziType;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 class PacchettiController extends Controller
@@ -124,4 +125,52 @@ class PacchettiController extends Controller
       return $this->redirectToRoute('pacchetto');
       return $this->render('pacchetti/pacchetto.html.twig');
     }
+
+    /**
+    * @Route("/servizi/create/{id}", name="servizi")
+    */
+    public function serviziAction(Request $request,$id)
+    {
+      $servizi = new Servizi();
+      $entityManager = $this->getDoctrine()->getManager();
+      $pacchetto = $entityManager->getRepository(Pacchetto::class)->find($id);
+      $form = $this->createForm(ServiziType::class, $servizi);
+      if ($request->isMethod('POST')) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+          $servizi = $servizi->setServizi($pacchetto);
+          $entityManager = $this->getDoctrine()->getManager();
+          $entityManager->persist($servizi);
+          $entityManager->flush();
+          $request->getSession()
+          ->getFlashBag()
+          ->add('success', 'Hai creato un servizio');
+        }
+        else {
+          // alert insucces //
+          $request->getSession()
+          ->getFlashBag()
+          ->add('notsuccess', 'Errore associato');
+        }
+        return $this->redirectToRoute('serviziview', array('id' => $id));
+      }
+      return $this->render(
+        'pacchetti/servizi.html.twig',array(
+          'form' => $form->createView(),
+          'pacchetto' => $pacchetto
+        ));
+      }
+
+      /**
+      * @Route("/servizi/view/{id}", name="serviziview")
+      */
+      public function serviziviewAction(Request $request,$id)
+      {
+        $entityManager = $this->getDoctrine()->getManager();
+        $pacchetto = $entityManager->getRepository(Pacchetto::class)->find($id);
+        return $this->render(
+          'pacchetti/serviziview.html.twig',array(
+            'pacchetto' => $pacchetto
+          ));
+      }
 }

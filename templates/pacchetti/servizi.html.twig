@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="col-md-6">
+    <h1>Servizi</h1>
+{{ form_start(form) }}
+<div class="form-group">
+    {{ form_row(form.nome, {'attr': {'class': 'form-control'}}) }}
+</div>
+    <button type="submit" class="btn btn-info">Aggiungi</button>
+{{ form_end(form) }}
+</div>
+{% endblock %}

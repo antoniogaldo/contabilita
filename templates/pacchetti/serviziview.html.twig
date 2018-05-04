@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="col-md-12">
+    <h1>Servizi</h1>
+    <!-- alert success -->
+    {% if app.session.flashBag.has('success') %}
+    <div class="alert alert-success alert-dismissible">
+      <a class="close" data-dismiss="alert" aria-label="close">×</a>
+      {% for msg in app.session.flashBag.get('success') %}
+      {{ msg }}
+      {% endfor %}
+    </div>
+    {% elseif app.session.flashBag.has('notsuccess') %}
+    <div class="alert alert-danger alert-dismissable">
+      <a class="close" data-dismiss="alert" aria-label="close">×</a>
+      {% for msg in app.session.flashBag.get('notsuccess') %}
+      {{ msg }}
+      {% endfor %}
+    </div>
+    {% endif %}
+    <h2>Pacchetto completo</h2>
+    <table id="example2" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Data inizio</th>
+          <th>Data fine</th>
+          <th>Luogo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>{{pacchetto.nome}}</strong></td>
+          <td>{{pacchetto.datainizio|date('d-m-Y')}}</td>
+          <td>{{pacchetto.datafine|date('d-m-Y')}}</td>
+          <td>{{pacchetto.luogo}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Servizi associati</h3>
+      <a class="btn btn-success btn-xs" href="{{ path('servizi', { id: pacchetto.id }) }}"><i class="fa fa-plus"></i> Aggiungi servizio</a>
+    <table id="example2" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Nome</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in pacchetto.servizi %}
+        <tr>
+          <td>{{c.nome}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+{% endblock %}
