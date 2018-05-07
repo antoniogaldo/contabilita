@@ -47,6 +47,10 @@ class Pacchetto
         return $this->id;
     }
 
+    public function __toString() {
+      return $this->getNome();
+    }
+
     /**
      * Set nome
      *

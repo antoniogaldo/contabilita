@@ -125,17 +125,6 @@
                 {% endif %}
                 <li class="{{ app.request.get('_route') == 'anagrafica' ? 'active' }}"><a href="{{ path('anagrafica') }}"><i class="fa fa-address-book"></i> <span>Anagrafica</span></a></li>
                 <!-- Anagrafica -->
-                <li class="treeview" >
-                  <a href="#"><i class="fa fa-address-book"></i> <span>niente</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                      </span>
-                  </a>
-                  <ul class="treeview-menu">
-                    <li><a href="">Crea cliente</a></li>
-
-                  </ul>
-                </li>
                 <!-- Pacchetto -->
                 <li class="treeview" >
                   <a href="#"><i class="fa fa-pencil"></i> <span>Pacchetto</span>
@@ -145,6 +134,7 @@
                   </a>
                   <ul class="treeview-menu">
                     <li><a href="{{ path('pacchetto') }}">Crea pacchetto</a></li>
+                    <li><a href="{{ path('opzioniservizi') }}">Crea servizio</a></li>
 
                   </ul>
                 </li>

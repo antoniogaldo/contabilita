@@ -8,8 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Pacchetti\Pacchetto;
 use App\Entity\Pacchetti\Servizi;
+use App\Entity\Pacchetti\Opzioniservizi;
 use App\Form\Pacchetti\PacchettoType;
 use App\Form\Pacchetti\ServiziType;
+use App\Form\Pacchetti\OpzioniserviziType;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 class PacchettiController extends Controller
@@ -173,4 +175,64 @@ class PacchettiController extends Controller
             'pacchetto' => $pacchetto
           ));
       }
+
+      /**
+      * @Route("/opzioniservizi/create", name="opzioniservizi")
+      */
+      public function opzioniserviziAction(Request $request)
+      {
+        $servizi = new servizi();
+        $opzioniservizi = new opzioniservizi();
+        $form = $this->createForm(ServiziType::class, $servizi);
+        $form1 = $this->createForm(OpzioniserviziType::class, $opzioniservizi);
+        if ($request->isMethod('POST')) {
+          $form->handleRequest($request);
+          if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($servizi);
+            $entityManager->flush();
+            $request->getSession()
+            ->getFlashBag()
+            ->add('success', 'Servizio inserito con successo');
+          }
+            else {
+              // alert insucces //
+              $request->getSession()
+              ->getFlashBag()
+              ->add('notsuccess', 'Richiesta non riuscita');
+            }
+            unset($servizi);
+            unset($form);
+            $servizi = new servizi();
+            $form = $this->createForm(ServiziType::class, $servizi);
+        }
+        if ($request->isMethod('POST')) {
+          $form1->handleRequest($request);
+          if ($form1->isSubmitted() && $form1->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($opzioniservizi);
+            $entityManager->flush();
+            $request->getSession()
+            ->getFlashBag()
+            ->add('success', 'Opzione inserita con successo');
+            }
+              else {
+                // alert insucces //
+                $request->getSession()
+                ->getFlashBag()
+                ->add('notsuccess', 'Richiesta non riuscita');
+              }
+            unset($opzioniservizi);
+            unset($form1);
+            $opzioniservizi = new opzioniservizi();
+            $form1 = $this->createForm(OpzioniserviziType::class, $opzioniservizi);
+
+        }
+        return $this->render(
+          'pacchetti/opzioneservizi.html.twig',array(
+            'form' => $form->createView(),
+            'form1' => $form1->createView(),
+          ));
+        }
+
 }

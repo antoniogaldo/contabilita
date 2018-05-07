@@ -29,12 +29,21 @@ class Servizi
     */
     private $servizi;
 
+    /**
+    * @ORM\OneToMany(targetEntity="Opzioniservizi", mappedBy="opzioniservizi", cascade={"persist", "remove"})
+    */
+    private $opzioniservizi;
+
+
     public function getId()
     {
         return $this->id;
     }
 
-
+    public function __toString() {
+      return $this->getNome();
+    }
+    
     /**
      * Set nome
      *
@@ -82,6 +91,30 @@ class Servizi
     public function getServizi()
     {
     return $this->servizi;
+    }
+
+    /**
+    * Set Opzioniservizi
+    *
+    * @param mixed opzioniservizi
+    *
+    * @return Servizi
+    */
+    public function setOpzioniservizi($opzioniservizi)
+    {
+     $this->opzioniservizi = $opzioniservizi;
+
+    return $this;
+    }
+
+    /**
+    * Get Opzioniservizi
+    *
+    * @return mixed
+    */
+    public function getOpzioniservizi()
+    {
+    return $this->opzioniservizi;
     }
 
 }
