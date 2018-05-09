@@ -9,9 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Pacchetti\Pacchetto;
 use App\Entity\Pacchetti\Servizi;
 use App\Entity\Pacchetti\Opzioniservizi;
+use App\Entity\Pacchetti\Tipologiaservizi;
 use App\Form\Pacchetti\PacchettoType;
 use App\Form\Pacchetti\ServiziType;
 use App\Form\Pacchetti\OpzioniserviziType;
+use App\Form\Pacchetti\TipologiaserviziType;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 class PacchettiController extends Controller
@@ -129,20 +131,19 @@ class PacchettiController extends Controller
     }
 
     /**
-    * @Route("/servizi/create/{id}", name="servizi")
+    * @Route("/servizi/create/{id}", name="servizicreate")
     */
-    public function serviziAction(Request $request,$id)
+    public function servizicreateAction(Request $request,$id)
     {
-      $servizi = new Servizi();
+      $tipologiaservizi = new Tipologiaservizi();
       $entityManager = $this->getDoctrine()->getManager();
       $pacchetto = $entityManager->getRepository(Pacchetto::class)->find($id);
-      $form = $this->createForm(ServiziType::class, $servizi);
+      $form = $this->createForm(TipologiaserviziType::class, $tipologiaservizi);
       if ($request->isMethod('POST')) {
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-          $servizi = $servizi->setServizi($pacchetto);
           $entityManager = $this->getDoctrine()->getManager();
-          $entityManager->persist($servizi);
+          $entityManager->persist($tipologiaservizi);
           $entityManager->flush();
           $request->getSession()
           ->getFlashBag()
@@ -154,7 +155,6 @@ class PacchettiController extends Controller
           ->getFlashBag()
           ->add('notsuccess', 'Errore associato');
         }
-        return $this->redirectToRoute('serviziview', array('id' => $id));
       }
       return $this->render(
         'pacchetti/servizi.html.twig',array(
@@ -181,6 +181,8 @@ class PacchettiController extends Controller
       */
       public function opzioniserviziAction(Request $request)
       {
+        $entityManager = $this->getDoctrine()->getManager();
+        $serviziviews = $entityManager->getRepository(Servizi::class)->findAll();
         $servizi = new servizi();
         $opzioniservizi = new opzioniservizi();
         $form = $this->createForm(ServiziType::class, $servizi);
@@ -232,6 +234,7 @@ class PacchettiController extends Controller
           'pacchetti/opzioneservizi.html.twig',array(
             'form' => $form->createView(),
             'form1' => $form1->createView(),
+            'serviziviews'=>$serviziviews,
           ));
         }
 

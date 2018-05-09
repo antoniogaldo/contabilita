@@ -19,12 +19,14 @@
   {% endif %}
   <!-- end alert  -->
     <h1>Servizi</h1>
+    <h2>Crea servizio</h2>
 {{ form_start(form) }}
 <div class="form-group">
     {{ form_row(form.nome, {'attr': {'class': 'form-control'}}) }}
 </div>
     <button type="submit" class="btn btn-info">Aggiungi</button>
 {{ form_end(form) }}
+<h2>Crea opzione</h2>
 {{ form_start(form1) }}
 <div class="form-group">
     {{ form_row(form1.opzioniservizi, {'attr': {'class': 'form-control'}}) }}
@@ -34,5 +36,23 @@
 </div>
     <button type="submit" class="btn btn-info">Aggiungi</button>
 {{ form_end(form1) }}
+</div>
+<div class="col-md-12">
+<table id="example1" class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Servizi</th>
+      <th>Opzioni</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in serviziviews %}
+    <tr>
+      <td>{{s}}</td>
+      <td>{% for o in s.opzioniservizi %}{{o.opzione}}<br>{% endfor %}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 </div>
 {% endblock %}

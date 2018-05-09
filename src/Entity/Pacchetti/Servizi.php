@@ -3,7 +3,8 @@
 namespace App\Entity\Pacchetti;
 
 use Doctrine\ORM\Mapping as ORM;
-use GuzzleHttp\Client;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Table(name="pacchetti__servizi")
@@ -30,20 +31,26 @@ class Servizi
     private $servizi;
 
     /**
-    * @ORM\OneToMany(targetEntity="Opzioniservizi", mappedBy="opzioniservizi", cascade={"persist", "remove"})
+    *@var Collection|Opzioniservizi[]
+    *
+    * @ORM\OneToMany(targetEntity="Opzioniservizi", mappedBy="opzioniservizi")
     */
     private $opzioniservizi;
 
-
+    public function __constructor()
+    {
+        $this->opzioniservizi = new ArrayCollection();
+    }
     public function getId()
     {
         return $this->id;
     }
 
+
     public function __toString() {
       return $this->getNome();
     }
-    
+
     /**
      * Set nome
      *
@@ -94,27 +101,22 @@ class Servizi
     }
 
     /**
-    * Set Opzioniservizi
-    *
-    * @param mixed opzioniservizi
-    *
-    * @return Servizi
-    */
-    public function setOpzioniservizi($opzioniservizi)
+     * @return Opzioniservizi[]|Collection
+     */
+    public function getOpzioniservizi()
     {
-     $this->opzioniservizi = $opzioniservizi;
-
-    return $this;
+        return $this->opzioniservizi;
     }
 
     /**
-    * Get Opzioniservizi
-    *
-    * @return mixed
-    */
-    public function getOpzioniservizi()
+     * @param Opzioniservizi[]|Collection $opzioniservizi
+     * @return $this
+     */
+    public function setOpzioniservizi($opzioniservizi)
     {
-    return $this->opzioniservizi;
+        $this->opzioniservizi = $opzioniservizi;
+
+        return $this;
     }
 
 }

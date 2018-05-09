@@ -4,9 +4,37 @@
     <h1>Servizi</h1>
 {{ form_start(form) }}
 <div class="form-group">
-    {{ form_row(form.nome, {'attr': {'class': 'form-control'}}) }}
+    {{ form_row(form.servizi, {'attr': {'class': 'form-control'}}) }}
 </div>
-    <button type="submit" class="btn btn-info">Aggiungi</button>
+<div class="form-group">
+    {{ form_row(form.opzioniservizi, {'attr': {'class': 'form-control'}}) }}
+</div>
 {{ form_end(form) }}
 </div>
+<script   src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script>
+var $servizi = $('#tipologiaservizi_servizi');
+// When sport gets selected ...
+$servizi.change(function() {
+  // ... retrieve the corresponding form.
+  var $form = $(this).closest('form');
+  // Simulate form data, but only include the selected sport value.
+  var data = {};
+  data[$servizi.attr('name')] = $servizi.val();
+  // Submit data via AJAX to the form's action path.
+  $.ajax({
+    url : $form.attr('action'),
+    type: $form.attr('method'),
+    data : data,
+    success: function(html) {
+      // Replace current position field ...
+      $('#tipologiaservizi_opzioniservizi').replaceWith(
+        // ... with the returned one from the AJAX response.
+        $(html).find('#tipologiaservizi_opzioniservizi')
+      );
+      // Position field now displays the appropriate positions.
+    }
+  });
+});
+</script>
 {% endblock %}

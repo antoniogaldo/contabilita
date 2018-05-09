@@ -6,11 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 use GuzzleHttp\Client;
 
 /**
- * @ORM\Table(name="pacchetti__opzioniservizi")
- * @ORM\Entity(repositoryClass="App\Repository\Pacchetti\OpzioniserviziRepository")
+ * @ORM\Table(name="pacchetti__tipologiaservizi")
+ * @ORM\Entity(repositoryClass="App\Repository\Pacchetti\TipologiaserviziRepository")
  */
-class Opzioniservizi
+
+class Tipologiaservizi
 {
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -21,47 +23,48 @@ class Opzioniservizi
     /**
      * @ORM\Column(type="string", length=25)
      */
-    private $opzione;
+    private $nome;
 
     /**
-    * @ORM\ManyToOne(targetEntity="Servizi", inversedBy="opzioniservizi")
-    * @ORM\JoinColumn(name="servizi_id", referencedColumnName="id", onDelete="CASCADE")
+    * @ORM\ManyToOne(targetEntity="Servizi")
+    * @ORM\JoinColumn(name="servizi_id", referencedColumnName="id",onDelete="CASCADE")
+    */
+    private $servizi;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="Opzioniservizi")
+    * @ORM\JoinColumn(name="opzioniservizi_id", referencedColumnName="id", onDelete="CASCADE")
     */
     private $opzioniservizi;
-
 
     public function getId()
     {
         return $this->id;
     }
-    public function __toString() {
-      return $this->opzione;
+
+    /**
+    * Set Servizi
+    *
+    * @param Servizi $servizi
+    *
+    * @return Servizi
+    */
+    public function setServizi($servizi)
+    {
+     $this->servizi = $servizi;
+
+    return $this;
     }
 
     /**
-     * Set opzione
-     *
-     * @param string opzione
-     *
-     * @return Opzioniservizi
-     */
-    public function setOpzione($opzione)
+    * Get Servizi
+    *
+    * @return mixed
+    */
+    public function getServizi()
     {
-        $this->opzione = $opzione;
-
-        return $this;
+    return $this->servizi;
     }
-
-    /**
-     * Get opzione
-     *
-     * @return string
-     */
-    public function getOpzione()
-    {
-        return $this->opzione;
-    }
-
 
     /**
     * Set Opzioniservizi
@@ -86,5 +89,4 @@ class Opzioniservizi
     {
     return $this->opzioniservizi;
     }
-
-}
+  }
